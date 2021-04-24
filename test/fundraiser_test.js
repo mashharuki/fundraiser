@@ -16,7 +16,7 @@ contract ("Fundraiser", accounts => {
         // 資金調達の名前とコンストラクタに渡した名前が一致していることを確認
         it ("gets the beneficiary name", async () => {
             const actual = await fundraiser.name();
-            WebAuthnAssertion.equal(actual, name, "names should match");
+            assert.equal(actual, name, "names should match");
         });
     });
 });
