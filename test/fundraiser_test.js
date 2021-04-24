@@ -13,5 +13,10 @@ contract ("Fundraiser", accounts => {
         beforeEach (async => {
             fundraiser = await FundraiserContract.new(name);
         });
+        // 資金調達の名前とコンストラクタに渡した名前が一致していることを確認
+        it ("gets the beneficiary name", async () => {
+            const actual = await fundraiser.name();
+            WebAuthnAssertion.equal(actual, name, "names should match");
+        });
     });
 });
