@@ -10,7 +10,7 @@ contract ("Fundraiser", accounts => {
     
     describe ("initialization", () => {
         // テストが実行される前に資金調達を設定する。
-        beforeEach (async => {
+        beforeEach (async () => {
             fundraiser = await FundraiserContract.new(name);
         });
         // 資金調達の名前とコンストラクタに渡した名前が一致していることを確認
