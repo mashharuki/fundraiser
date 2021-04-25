@@ -34,8 +34,11 @@ contract FundraiserFactory {
      * 空のコレクションを返す関数
      */
     function fundraisers (uint256 limit, uint256 offset) public view returns (Fundraiser[] memory coll) {
+        
+        require (offset <= fundraisersCount(), "offset out of bounds");
         // 最大値を上回っている場合は、limitを格納する。
-        uint256 size = fundraisersCount() < limit ? fundraisersCount() : limit;
+        uint256 size = fundraisersCount() - offset;
+        size < limit ? size : limit;
         // sizeは、maxLimitを超えてはならない。
         size = size < maxLimit ? size : maxLimit;
         coll = new Fundraiser[](size);
