@@ -2,6 +2,8 @@
 
 // FundraiserFactoryコントラクトを読み込んでインスタンス化する。
 const FundraiserFactoryContract = artifacts.require("FundraiserFactory");
+// Fundraiserコントラクトを読み込んでインスタンス化する。
+const FundraiserContract = artifacts.require("Fundraiser");
 
 // コントラクトのデプロイ用テストコード
 contract ("FundraiserFactory: deployment", () => {
@@ -103,15 +105,37 @@ contract ("FundraiserFactory: fundraisers", (accounts) => {
             assert.equal(fundraisers.length, 10, "results size should be 10");
         });
         // xit はテストに「保留中」のマークをつける。
-        xit ("returns 20 results when limit requested is 20", async () => {
+        it ("returns 20 results when limit requested is 20", async () => {
             const fundraisers = await factory.fundraisers(20, 0);
             assert.equal(fundraisers.length, 20, "results size should be 20");
         });
 
-        xit ("returns 20 results when limit requested is 30", async () => {
+        it ("returns 20 results when limit requested is 30", async () => {
             const fundraisers = await factory.fundraisers(30, 0);
             assert.equal(fundraisers.length, 20, "results size should be 20");
         });
+    });
 
+    // オフセットについてのテストコード
+    describe ("varying offset", async () => {
+        // テスト前の設定
+        beforeEach (async () => {
+            // インスタンスを生成
+            factory = await createFundraiserFactory(10, accounts);
+        });
+  
+        it ("contains the fundraiser with the appropriate offset", async () => {
+            const fundraisers = await factory.fundraisers(1, 0);
+            const fundraiser = FundraiserContract.at(fundraisers[0]);
+            const name = await fundraiser.name();
+            assert.ok(await name.includes(7), `${name} did not include the offset`);
+        });
+
+        xit ("contains the fundraiser with the appropriate offset", async () => {
+            const fundraisers = await factory.fundraisers(1, 7);
+            const fundraiser = FundraiserContract.at(fundraisers[0]);
+            const name = await fundraiser.name();
+            assert.ok(await name.includes(7), `${name} did not include the offset`);
+        });
     });
 });
