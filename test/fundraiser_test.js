@@ -13,11 +13,15 @@ contract ("Fundraiser", accounts => {
     const imageURL = "https://placekitten.com/600/350";
     // 簡単な説明
     const description = "Beneficiary description";
+    // 受取人のアドレス
+    const beneficiary = accounts[1];
+    // 管理人のアドレス
+    const custodian = accounts[0];
     
     describe ("initialization", () => {
         // テストが実行される前に資金調達を設定する。
         beforeEach (async () => {
-            fundraiser = await FundraiserContract.new(name, url, imageURL, description);
+            fundraiser = await FundraiserContract.new(name, url, imageURL, description, beneficiary, custodian);
         });
         // 資金調達の名前とコンストラクタに渡した名前が一致していることを確認
         it ("gets the beneficiary name", async () => {
@@ -35,6 +39,16 @@ contract ("Fundraiser", accounts => {
         it ("gets the beneficiary description", async () => {
             const actual = await fundraiser.description();
             assert.equal(actual, description, "description should match");
+        });
+        // 受取人のアドレスが正常かどうかチェックするテストコード
+        it ("gets the beneficiary description", async () => {
+            const actual = await fundraiser.beneficiary();
+            assert.equal(actual, beneficiary, "beneficiary address should match");
+        });
+        // 管理人のアドレスが正常かどうかチェックするテストコード
+        it ("gets the custodian", async () => {
+            const actual = await fundraiser.custodian();
+            assert.equal(actual, custodian, "custodian should match");
         });
     });
 });
