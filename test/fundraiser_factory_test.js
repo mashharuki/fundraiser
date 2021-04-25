@@ -49,3 +49,41 @@ contract ("FundraiserFactory: createfundraiser", (accounts) => {
         assert.equal(actualEvent, expectedEvent, "events should match");
     });
 });
+
+// Fundraiserコントラクトインスタンスページング作成用テストコード
+contract ("FundraiserFactory: fundraisers", (accounts) => {
+    // インスタンス生成関数
+    async function createFundraiserFactory (fundraisersCount, accounts) {
+        // インスタンス初期化
+        const factory = await FundraiserFactoryContract.new();
+        // addFundraisers関数を呼び出し
+        await addFundraisers (factory, fundraiserCount, accounts);
+        return factory;
+    }
+    
+    /**
+     * addFundraisers関数
+     */
+    async function addFundraisers (factory, count, accounts) {
+        // 変数を初期化
+        const name = "Beneficiary";
+        const lowerCaseName = name.toLowerCase();
+        const beneficiary = accounts[1];
+
+        for (let i=0; i < count; i++) {
+            // インスタンスを生成
+            await factory.createFundraiser (`${name} ${i}`, `${lowerCaseName}${i}.com`, `${lowerCaseName}${i}.png`, `Description for ${name} ${i}`, beneficiary);
+        }
+    }
+
+    // 空のコレクションでページングするテストコード
+    describe ("when fundraisers collection is empty", () => {
+        it ("returns an empty collection", async () => {
+            // インスタンス生成
+            const factory = await createFundraiserFactory (0, accounts);
+            // fundraisers関数を呼び出し
+            const fundraisers = await factory.fundraisers (10, 0);
+            assert.equal(fundraisers.length, 0, "collection should be empty");
+        });
+    });
+});

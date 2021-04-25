@@ -28,5 +28,10 @@ contract FundraiserFactory {
         emit FundraiserCreated(fundraiser, fundraiser.owner());
     }
 
-
+    /**
+     * 空のコレクションを返す関数
+     */
+    function fundraisers (uint256 limit, uint256 offset) public view returns (Fundraiser[] memory coll) {
+        return coll;    
+    }
 }
