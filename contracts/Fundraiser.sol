@@ -30,6 +30,8 @@ contract Fundraiser is Ownable {
 
     // 寄付を受け取った時のイベントを定義する。
     event DonationReceived (address indexed donor, uint256 value);
+    // 残高を送金したときのイベントを定義する。
+    event Withdraw(uint256 amount);
 
     /**
      * コンストラクター
@@ -91,5 +93,17 @@ contract Fundraiser is Ownable {
             dates[i] = donation.date;
         }
         return (values, dates);
+    }
+
+    /**
+     * 資金を引き出すための関数
+     */
+    function withdraw () public onlyOwner {
+        // コントラクトの残高を取得する。
+        uint256 balance = address(this).balance;
+        // 送金する。
+        beneficiary.transfer(balance);
+        // イベントを発行する。
+        emit Withdraw(balance);
     }
 }

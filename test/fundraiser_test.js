@@ -54,7 +54,7 @@ contract ("Fundraiser", accounts => {
         });
     });
 
-    // setBeneficiary関数用のテストコード
+    // 受取人のアドレス設定関連のテストコードグループ
     describe ("setBeneficiary", () => {
         // 新しい受取人のアドレスを設定する。
         const newBeneficiary = accounts[2];
@@ -80,7 +80,7 @@ contract ("Fundraiser", accounts => {
         });
     });
 
-    // 寄付のテストコード
+    // 寄付関連機能のテストコードグループ
     describe ("making donations", () => {
         // 寄付額
         const value = web3.utils.toWei('0.0289');
@@ -127,6 +127,67 @@ contract ("Fundraiser", accounts => {
             const tx = await fundraiser.donate ({from: donor, value});
             const expectedEvent = "DonationReceived";
             const actualEvent = tx.logs[0].event;
+            assert.equal (actualEvent, expectedEvent, "events should match");
+        });
+    });
+
+    // 資金の引き出し機能のテストコードグループ
+    describe ("withdrawing funds", () => {
+        beforeEach (async () => {
+            // 寄付を行う。
+            await fundraiser.donate({from: accounts[2], value: web3.utils.toWei('0.1')});
+        });
+
+        // 引き出し関数用のテストコード
+        describe ("withdrawing funds", () => {
+            // 送金者のアドレスと所有者のアドレスが一致しているかチェックする。
+            describe ("access controls", async () => {
+                it ("throws an error when called from a non-owner account", async () => {
+                    try {
+                        await fundraiser.withdraw({from: accounts[3]});
+                        assert.fail ("withdraw was not restricted to owners");
+                    } catch (err) {
+                        const expectedError = "Ownable: caller is not the owner";
+                        const actualError = err.reason;
+                        assert.equal(actualError, expectedError, "should not be permitted");
+                    }
+                });
+                // 所有者から呼び出されていることをチェックする。
+                it ("permits the owner to call the function", async () => {
+                    try {
+                        await fundraiser.withdraw ({from: owner});
+                        assert (true, "no errors were thrown");
+                    } catch (err) {
+                        assert.fail ("should not have thrown an error");
+                    }
+                });
+            });
+        });
+
+        // コントラクトの残高を受取人に送金するためのテストコード
+        it ("transfers balance to beneficiary", async () => {
+            // コントラクトの残高を取得する。
+            const currentContractBalance = await web3.eth.getBalance(fundraiser.address);
+            // 受取人の残高を取得する。
+            const currentBeneficiaryBalance = await web3.eth.getBalance(beneficiary);
+            // 引き出し関数の呼び出し
+            await fundraiser.withdraw({from: owner});
+            // コントラクトの残高を取得する。
+            const newContractBalance = await web3.eth.getBalance(fundraiser.address);
+            // 受取人の残高を取得する。
+            const newBeneficiaryBalance = await web3.eth.getBalance(beneficiary);
+            // 差異を算出する。
+            const beneficiaryDifference = newBeneficiaryBalance - currentBeneficiaryBalance;
+            assert.equal (newContractBalance, 0, "contract should have a 0 balance");
+            assert.equal (beneficiaryDifference, currentContractBalance, "beneficiary should receive all the funds");
+        });
+
+        // イベントが発行されたかのテスト
+        it ("emit Withdraw event", async () => {
+            const tx = await fundraiser.withdraw({from: owner});
+            const expectedEvent = "Withdraw";
+            const actualEvent = tx.logs[0].event;
+            // イベントが発行されたどうかチェックする。
             assert.equal (actualEvent, expectedEvent, "events should match");
         });
     });
