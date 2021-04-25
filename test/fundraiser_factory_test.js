@@ -86,4 +86,32 @@ contract ("FundraiserFactory: fundraisers", (accounts) => {
             assert.equal(fundraisers.length, 0, "collection should be empty");
         });
     });
+
+    // 上限値についてのテストコード
+    describe ("varying limits", async () => {
+        // インスタンス用の変数
+        let factory;
+
+        // テスト前の設定
+        beforeEach (async () => {
+            // インスタンスを生成
+            factory = await createFundraiserFactory(30, accounts);
+        });
+        // 10個のインスタンスを返すかテスト
+        it ("returns 10 results when limit requested is 10", async () => {
+            const fundraisers = await factory.fundraisers(10, 0);
+            assert.equal(fundraisers.length, 10, "results size should be 10");
+        });
+        // xit はテストに「保留中」のマークをつける。
+        xit ("returns 20 results when limit requested is 20", async () => {
+            const fundraisers = await factory.fundraisers(20, 0);
+            assert.equal(fundraisers.length, 20, "results size should be 20");
+        });
+
+        xit ("returns 20 results when limit requested is 30", async () => {
+            const fundraisers = await factory.fundraisers(30, 0);
+            assert.equal(fundraisers.length, 20, "results size should be 20");
+        });
+
+    });
 });

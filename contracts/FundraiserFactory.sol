@@ -5,6 +5,8 @@ import "./Fundraiser.sol";
 contract FundraiserFactory {
     // Fundraiser型の配列
     Fundraiser[] private _fundraisers;
+    // fundraisers関数から返すことのできる最大値
+    uint256 constant maxLimit = 20;
 
     // インスタンスが生成された時のイベント
     event FundraiserCreated (Fundraiser indexed fundraiser, address indexed owner);
@@ -32,6 +34,12 @@ contract FundraiserFactory {
      * 空のコレクションを返す関数
      */
     function fundraisers (uint256 limit, uint256 offset) public view returns (Fundraiser[] memory coll) {
+        // 最大値を上回っている場合は、limitを格納する。
+        uint256 size = fundraisersCount() < limit ? fundraisersCount() : limit;
+        // sizeは、maxLimitを超えてはならない。
+        size = size < maxLimit ? size : maxLimit;
+        coll = new Fundraiser[](size);
+
         return coll;    
     }
 }
