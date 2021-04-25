@@ -25,6 +25,11 @@ contract Fundraiser is Ownable {
     mapping (address => Donation[]) private _donations;
     // 寄付総額
     uint256 public totalDonations;
+    // 寄付件数
+    uint256 public donationsCount;
+
+    // 寄付を受け取った時のイベントを定義する。
+    event DonationReceived (address indexed donor, uint256 value);
 
     /**
      * コンストラクター
@@ -65,6 +70,10 @@ contract Fundraiser is Ownable {
         _donations[msg.sender].push(donation);
         // 寄付総額の算出
         totalDonations = totalDonations.add(msg.value);
+        // 寄付件数を増やす。
+        donationsCount++;
+        // イベントを発行する。
+        emit DonationReceived (msg.sender, msg.value);
       }
 
     /**

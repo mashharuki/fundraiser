@@ -96,7 +96,7 @@ contract ("Fundraiser", accounts => {
             const newDonationsCount = await fundraiser.myDonationsCount({from: donor});
             assert.equal(1, newDonationsCount - currentDonationsCount, "myDonationsCount should increment by 1");
         });
-
+        // 寄付を行うテスト
         it ("include donation in myDonations", async () => {
             // 寄付関数を実行する。
             await fundraiser.donate({from: donor, value});
@@ -105,7 +105,7 @@ contract ("Fundraiser", accounts => {
             assert.equal(value, values[0], "values should match");
             assert (dates[0], "date should be present");
         });
-
+        // 寄付総額を確認するテスト
         it ("increase the totalDonations amount", async () => {
             const currentTotalDonations = await fundraiser.totalDonations();
             await fundraiser.donate ({from: donor, value});
@@ -113,6 +113,21 @@ contract ("Fundraiser", accounts => {
             // 差異を算出する。
             const diff = newTotalDonations - currentTotalDonations;
             assert.equal (diff, value, "difference should match the donation value");
+        });
+
+        // 寄付の件数のテスト
+        it ("increase donationsCount", async () => {
+            const currentTotalDonations = await fundraiser.donationsCount();
+            await fundraiser.donate ({from: donor, value});
+            const newTotalDonations = await fundraiser.donationsCount();
+            assert.equal (1, (newTotalDonations - currentTotalDonations), "donationsCount should increment by 1");
+        });
+        // イベントが発行されたかのテスト
+        it ("emit the DonationReceived event", async () => {
+            const tx = await fundraiser.donate ({from: donor, value});
+            const expectedEvent = "DonationReceived";
+            const actualEvent = tx.logs[0].event;
+            assert.equal (actualEvent, expectedEvent, "events should match");
         });
     });
 });
