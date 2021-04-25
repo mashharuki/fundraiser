@@ -106,4 +106,14 @@ contract Fundraiser is Ownable {
         // イベントを発行する。
         emit Withdraw(balance);
     }
+
+    /**
+     * フォールバック関数
+     */
+    fallback () external payable {
+        // 寄付総額を追加する。
+        totalDonations = totalDonations.add(msg.value);
+        // 寄付件数を増加する。
+        donationsCount++;
+    }
 }

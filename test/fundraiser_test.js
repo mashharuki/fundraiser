@@ -191,4 +191,26 @@ contract ("Fundraiser", accounts => {
             assert.equal (actualEvent, expectedEvent, "events should match");
         });
     });
+
+     // フォールバック関数用のテストコードグループ
+     describe ("fallback function", () => {
+        // 入金額
+        const value = web3.utils.toWei('0.0289');
+        // 寄付総額が増加した時のテスト
+        it ("increase the totalDonations amount", async () => {
+            const currentTotalDonations = await fundraiser.totalDonations();
+            await web3.eth.sendTransaction({to: fundraiser.address, from: accounts[9], value});
+            const newTotalDonations = await fundraiser.totalDonations();
+            // 差異を算出する。
+            const diff = newTotalDonations - currentTotalDonations;
+            assert.equal (diff, value, "difference should match the donation value");
+        });
+        // 寄付件数が増加した時のテスト
+        it ("increase donationsCount", async () => {
+            const currentTotalDonations = await fundraiser.donationsCount();
+            await web3.eth.sendTransaction({to: fundraiser.address, from: accounts[9], value});
+            const newTotalDonations = await fundraiser.donationsCount();
+            assert.equal (1, (newTotalDonations - currentTotalDonations), "donationsCount should increment by 1");
+        });
+     });
 });
