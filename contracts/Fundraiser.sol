@@ -22,6 +22,6 @@ contract Fundraiser {
         imageURL = _imageURL;
         description = _description;
         beneficiary = _beneficiary;
-        transferOwnership (_custodian);
+        transferOwnership(_custodian);
     }
 }
