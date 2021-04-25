@@ -1,5 +1,7 @@
 pragma solidity >0.4.23;
 
+import "openzeppelin-solidity/contracts/access/Ownable.sol";
+
 contract Fundraiser {
     // 変数を宣言する。
     string public name;
@@ -20,6 +22,6 @@ contract Fundraiser {
         imageURL = _imageURL;
         description = _description;
         beneficiary = _beneficiary;
-        custodian = _custodian;
+        transferOwnership (_custodian);
     }
 }

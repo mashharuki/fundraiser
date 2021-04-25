@@ -16,12 +16,12 @@ contract ("Fundraiser", accounts => {
     // 受取人のアドレス
     const beneficiary = accounts[1];
     // 管理人のアドレス
-    const custodian = accounts[0];
+    const owner = accounts[0];
     
     describe ("initialization", () => {
         // テストが実行される前に資金調達を設定する。
         beforeEach (async () => {
-            fundraiser = await FundraiserContract.new(name, url, imageURL, description, beneficiary, custodian);
+            fundraiser = await FundraiserContract.new(name, url, imageURL, description, beneficiary, owner);
         });
         // 資金調達の名前とコンストラクタに渡した名前が一致していることを確認
         it ("gets the beneficiary name", async () => {
@@ -46,9 +46,9 @@ contract ("Fundraiser", accounts => {
             assert.equal(actual, beneficiary, "beneficiary address should match");
         });
         // 管理人のアドレスが正常かどうかチェックするテストコード
-        it ("gets the custodian", async () => {
-            const actual = await fundraiser.custodian();
-            assert.equal(actual, custodian, "custodian should match");
+        it ("gets the owner", async () => {
+            const actual = await fundraiser.owner();
+            assert.equal(actual, owner, "bios should match");
         });
     });
 });
