@@ -6,6 +6,9 @@ contract FundraiserFactory {
     // Fundraiser型の配列
     Fundraiser[] private _fundraisers;
 
+    // インスタンスが生成された時のイベント
+    event FundraiserCreated (Fundraiser indexed fundraiser, address indexed owner);
+
     /**
      * インスタンス数を取得する関数
      */
@@ -21,5 +24,9 @@ contract FundraiserFactory {
         Fundraiser fundraiser = new Fundraiser (name, url, imageURL, description, beneficiary, msg.sender);
         // 配列に格納する。
         _fundraisers.push(fundraiser);
+        // イベントの発行
+        emit FundraiserCreated(fundraiser, fundraiser.owner());
     }
+
+
 }
