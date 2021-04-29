@@ -38,7 +38,7 @@ contract FundraiserFactory {
         require (offset <= fundraisersCount(), "offset out of bounds");
         // 最大値を上回っている場合は、limitを格納する。
         uint256 size = fundraisersCount() - offset;
-        size < limit ? size : limit;
+        size = size < limit ? size : limit;
         // sizeは、maxLimitを超えてはならない。
         size = size < maxLimit ? size : maxLimit;
         coll = new Fundraiser[](size);
