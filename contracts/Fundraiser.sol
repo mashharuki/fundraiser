@@ -13,7 +13,7 @@ contract Fundraiser is Ownable {
     string public imageURL;
     string public description; 
     // 受取人のアドレス
-    address public beneficiary;
+    address payable public beneficiary;
     // 管理人のアドレス
     address public custodian;
     // 構造体
