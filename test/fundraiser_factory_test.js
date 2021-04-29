@@ -127,14 +127,14 @@ contract ("FundraiserFactory: fundraisers", (accounts) => {
         it ("contains the fundraiser with the appropriate offset", async () => {
             const fundraisers = await factory.fundraisers(1, 0);
             const fundraiser = FundraiserContract.at(fundraisers[0]);
-            const name = await fundraiser.name();
-            assert.ok(await name.includes(7), `${name} did not include the offset`);
+            const name = await fundraiser.name;
+            assert.ok(await name.includes(0), `${name} did not include the offset`);
         });
 
         it ("contains the fundraiser with the appropriate offset", async () => {
             const fundraisers = await factory.fundraisers(1, 7);
             const fundraiser = FundraiserContract.at(fundraisers[0]);
-            const name = await fundraiser.name();
+            const name = await fundraiser.name;
             assert.ok(await name.includes(7), `${name} did not include the offset`);
         });
     });
