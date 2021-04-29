@@ -15,7 +15,7 @@ contract ("FundraiserFactory: deployment", () => {
 
 // Fundraiserコントラクトインスタンス作成用テストコード
 contract ("FundraiserFactory: createfundraiser", (accounts) => {
-    let FundraiserFactory;
+    let fundraiserFactory;
     // 以下、fundraiserの引数
     // 受取人の名前
     const name = "Beneficiary Name";
