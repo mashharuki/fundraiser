@@ -67,7 +67,7 @@ contract ("Fundraiser", accounts => {
             assert.equal(actualBeneficiary, newBeneficiary, "beneficiaries should match");
         });
         // 所有者以外から呼び出された時にエラーを出力するかどうかチェックする。
-        it ("throws an error when called from a non-owner account", async => {
+        it ("throws an error when called from a non-owner account", async () => {
             try {
                 // setBeneficiary関数の呼び出し
                 await fundraiser.setBeneficiary (newBeneficiary, {from: accounts[3]});
