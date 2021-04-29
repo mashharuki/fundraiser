@@ -55,7 +55,7 @@ contract ("FundraiserFactory: createfundraiser", (accounts) => {
 // Fundraiserコントラクトインスタンスページング作成用テストコード
 contract ("FundraiserFactory: fundraisers", (accounts) => {
     // インスタンス生成関数
-    async function createFundraiserFactory (fundraisersCount, accounts) {
+    async function createFundraiserFactory (fundraiserCount, accounts) {
         // インスタンス初期化
         const factory = await FundraiserFactoryContract.new();
         // addFundraisers関数を呼び出し

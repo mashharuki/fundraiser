@@ -27,7 +27,7 @@ contract FundraiserFactory {
         // 配列に格納する。
         _fundraisers.push(fundraiser);
         // イベントの発行
-        emit FundraiserCreated(fundraiser, fundraiser.owner());
+        emit FundraiserCreated(fundraiser, msg.sender);
     }
 
     /**
