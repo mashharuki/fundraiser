@@ -110,7 +110,7 @@ contract Fundraiser is Ownable {
     /**
      * フォールバック関数
      */
-    fallback() external payable {
+    function () external payable {
         // 寄付総額を追加する。
         totalDonations = totalDonations.add(msg.value);
         // 寄付件数を増加する。
